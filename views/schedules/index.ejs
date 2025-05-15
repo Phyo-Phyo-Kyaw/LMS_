@@ -1,0 +1,80 @@
+<!-- Make sure this is inside your EJS view file (e.g., schedule.ejs) -->
+
+<div class="container mx-auto mt-8">
+  <h1 class="text-2xl font-bold mb-4">Schedule</h1>
+
+  <!-- Table View -->
+  <table class="w-full table-auto bg-white rounded shadow mb-10">
+    <thead class="bg-gray-200">
+      <tr>
+        <th class="px-4 py-2">Course</th>
+        <th class="px-4 py-2">Instructor</th>
+        <th class="px-4 py-2">Day</th>
+        <th class="px-4 py-2">Time</th>
+        <th class="px-4 py-2">Location</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% schedules.forEach(item => { %>
+        <tr class="text-center border-t">
+          <td class="px-4 py-2"><%= item.course_name %></td>
+          <td class="px-4 py-2"><%= item.instructor %></td>
+          <td class="px-4 py-2"><%= item.day %></td>
+          <td class="px-4 py-2"><%= item.time_start.slice(0,5) %> - <%= item.time_end.slice(0,5) %></td>
+          <td class="px-4 py-2"><%= item.location %></td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+
+  <!-- Calendar View -->
+  <h2 class="text-xl font-semibold mb-4">📅 Schedule Calendar</h2>
+  <div id="calendar" class="bg-white p-4 rounded shadow"></div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const calendarEl = document.getElementById('calendar');
+
+    // Create one tooltip element once
+    const tooltip = document.createElement('div');
+    tooltip.className = 'bg-black text-white text-xs p-1 rounded absolute z-50';
+    tooltip.style.display = 'none';
+    document.body.appendChild(tooltip);
+
+    const calendar = new FullCalendar.Calendar(calendarEl, {
+      initialView: 'dayGridMonth',
+      height: 600,
+      events: [
+        <% schedules.forEach(item => { %>
+          {
+            title: '<%= item.course_name %> - <%= item.instructor %>',
+            start: '<%= item.day %>T<%= item.time_start %>',
+            end: '<%= item.day %>T<%= item.time_end %>',
+            description: 'Location: <%= item.location %>'
+          },
+        <% }); %>
+      ],
+      eventDidMount: function (info) {
+        info.el.addEventListener('mouseenter', (e) => {
+          tooltip.innerText = info.event.extendedProps.description;
+          tooltip.style.display = 'block';
+          // Add slight offset so tooltip is not directly under mouse
+          tooltip.style.left = (e.pageX + 10) + 'px';
+          tooltip.style.top = (e.pageY + 10) + 'px';
+        });
+
+        info.el.addEventListener('mousemove', (e) => {
+          // Move tooltip with mouse
+          tooltip.style.left = (e.pageX + 10) + 'px';
+          tooltip.style.top = (e.pageY + 10) + 'px';
+        });
+
+        info.el.addEventListener('mouseleave', () => {
+          tooltip.style.display = 'none';
+        });
+      }
+    });
+
+    calendar.render();
+  });
+</script>

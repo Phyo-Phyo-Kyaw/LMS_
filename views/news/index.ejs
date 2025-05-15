@@ -1,0 +1,16 @@
+<div class="container mx-auto mt-8">
+  <h1 class="text-3xl font-bold mb-4">📰 News</h1>
+
+  <div class="space-y-6">
+    <% news.forEach(item => { %>
+      <div class="bg-white p-4 shadow rounded">
+        <h2 class="text-xl font-semibold"><%= item.title %></h2>
+        <p class="text-sm text-gray-600 mb-2">
+          <%= new Date(item.created_at).toLocaleDateString() %> |
+          Tags: <%= item.tags %>
+        </p>
+        <p><%= item.content.substring(0, 200) %>...</p>
+      </div>
+    <% }) %>
+  </div>
+</div>

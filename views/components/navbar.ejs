@@ -1,0 +1,20 @@
+<nav class="bg-blue-600 text-white p-4">
+  <div class="container mx-auto flex justify-between items-center">
+    <div class="text-lg font-semibold">LMS</div>
+
+    <!-- Language Switch -->
+    <div>
+      <a href="?lang=en" class="hover:underline">English</a> |
+      <a href="?lang=mm" class="hover:underline">မြန်မာ</a>
+    </div>
+
+    <!-- Menu -->
+    <ul class="flex gap-4">
+      <li><a href="/dashboard" class="hover:underline"><%= __('Dashboard') %></a></li>
+      <li><a href="/courses" class="hover:underline"><%= __('Courses') %></a></li>
+      <li><a href="/news" class="hover:underline"><%= __('News') %></a></li>
+      <li><a href="/events" class="hover:underline"><%= __('Events') %></a></li>
+      <li><a href="/logout" class="hover:underline"><%= __('Logout') %></a></li>
+    </ul>
+  </div>
+</nav>
