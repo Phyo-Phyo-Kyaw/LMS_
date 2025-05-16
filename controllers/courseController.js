@@ -1,8 +1,8 @@
-const dbPromise = require('../config/db');
+const db = require('../config/db');
 
 exports.getAllCourses = async (req, res) => {
   try {
-    const db = await dbPromise;
+    
     const [courses] = await db.query('SELECT * FROM courses');
     res.render('courses/index', { courses }); 
   } catch (err) {
