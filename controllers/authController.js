@@ -1,4 +1,4 @@
-const dbPromise = require('../config/db');
+const db = require('../config/db');
 const bcrypt = require('bcrypt');
 exports.getAllUsers = async (req, res) => {
   try {
@@ -12,7 +12,7 @@ exports.getAllUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
   try {
     let { email, password} = req.body;
-    const db = await dbPromise;
+   
     const [rows] = await db.query('SELECT * FROM Users WHERE email = ?', [email]);
     if (rows.length === 0) {
       res.redirect('/login');
@@ -41,7 +41,7 @@ exports.createUser = async (req, res) => {
   try {
     // Use let here to allow reassignment
     let { name, email, phone, password, role } = req.body;
-    const db = await dbPromise;
+    
     role = role ?? 2;  // default role if not provided
     password = await bcrypt.hash(password, 10);  // hash password
 
