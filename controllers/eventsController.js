@@ -1,12 +1,11 @@
-const dbPromise = require('../config/db');
+const pool = require('../config/db');
 
 exports.getAllEvents = async (req, res) => {
   try {
-    const db = await dbPromise;
-    const [events] = await db.query('SELECT * FROM events');
+    const result = await pool.query('SELECT * FROM events');
+    const events = result.rows;
     res.render('events/index', { events }); 
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
-
