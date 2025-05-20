@@ -1,9 +1,9 @@
-const db = require('../config/db');
+const pool = require('../config/db');
 
 exports.getAllCourses = async (req, res) => {
   try {
-    
-    const [courses] = await db.query('SELECT * FROM courses');
+    const result = await pool.query('SELECT * FROM courses');
+    const courses = result.rows;
     res.render('courses/index', { courses }); 
   } catch (err) {
     res.status(500).json({ error: err.message });
