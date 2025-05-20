@@ -1,15 +1,12 @@
-// db.js
-import pkg from 'pg';
-import dotenv from 'dotenv';
-dotenv.config();
+// db.js (for CommonJS)
+const { Pool } = require('pg');
+require('dotenv').config();
 
-const { Pool } = pkg;
-
-const db = new Pool({
+const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false, // required for Render's PostgreSQL
+    rejectUnauthorized: false,
   },
 });
 
-export default db;
+module.exports = pool;
