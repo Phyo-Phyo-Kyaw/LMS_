@@ -1,20 +1,57 @@
 <nav class="bg-blue-600 text-white p-4">
-  <div class="container mx-auto flex justify-between items-center">
-    <div class="text-lg font-semibold">LMS</div>
+	<div class="container mx-auto flex flex-wrap justify-between items-center">
+	 
+	 <div class="text-lg font-semibold mb-2 md:mb-0">LMS</div>
 
-    <!-- Language Switch -->
-    <div>
-      <a href="?lang=en" class="hover:underline">English</a> |
-      <a href="?lang=mm" class="hover:underline">မြန်မာ</a>
-    </div>
+	 <!-- Language + Clock -->
+	 <div class="flex items-center gap-4 mb-2 md:mb-0">
+		<div class="text-sm space-x-2">
+			<a href="#" onclick="setLanguage('en')">English</a>
+			<span>|</span>
+			<a href="#" onclick="setLanguage('mm')">မြန်မာ</a>
+		</div>
+		<div class="flex items-center gap-3 border-l border-r px-4 py-2">
+			 <img src="https://img.icons8.com/ios-filled/50/clock--v1.png" alt="Clock Icon" class="w-6 h-6" />
+			<div>
+			 <div id="liveTime" class="text-lg font-bold">--:--:--</div>
+			</div>
+		</div>
+	 </div>
 
-    <!-- Menu -->
-    <ul class="flex gap-4">
-      <li><a href="/dashboard" class="hover:underline"><%= __('Dashboard') %></a></li>
-      <li><a href="/courses" class="hover:underline"><%= __('Courses') %></a></li>
-      <li><a href="/news" class="hover:underline"><%= __('News') %></a></li>
-      <li><a href="/events" class="hover:underline"><%= __('Events') %></a></li>
-      <li><a href="/logout" class="hover:underline"><%= __('Logout') %></a></li>
-    </ul>
-  </div>
+	 <!-- Navigation Menu -->
+	 <ul class="w-full md:w-auto flex flex-col md:flex-row gap-2 md:gap-4 mt-2 md:mt-0">
+		<li><a href="/dashboard" class="hover:underline"><%= __('Dashboard') %></a></li>
+		<li><a href="/courses" class="hover:underline"><%= __('Courses') %></a></li>
+		<li><a href="/news" class="hover:underline"><%= __('News') %></a></li>
+		<li><a href="/events" class="hover:underline"><%= __('Events') %></a></li>
+		<li><a href="/logout" class="hover:underline"><%= __('Logout') %></a></li>
+	 </ul>
+	</div>
 </nav>
+<script>
+	function updateClock() {
+	 const now = new Date();
+	 const hours = now.getHours();
+	 const minutes = now.getMinutes();
+	 const seconds = now.getSeconds();
+	 const ampm = hours >= 12 ? 'PM' : 'AM';
+
+	 const formattedTime = [
+		hours % 12 || 12,
+		minutes.toString().padStart(2, '0'),
+		seconds.toString().padStart(2, '0')
+	 ].join(':') + ' ' + ampm;
+
+	 document.getElementById('liveTime').textContent = formattedTime;
+	}
+
+	setInterval(updateClock, 1000);
+	updateClock(); // run immediately
+</script>
+<script>
+	function setLanguage(lang) {
+		document.cookie = `lang=${lang}; path=/;`; 
+		location.reload(); // reload to apply language
+	}
+</script>
+
