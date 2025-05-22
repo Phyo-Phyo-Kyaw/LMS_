@@ -2,6 +2,7 @@ const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 const app = express();
@@ -19,6 +20,14 @@ i18n.configure({
 });
 
 app.use(i18n.init);
+app.use(cookieParser());
+
+app.use((req, res, next) => {
+  const lang = req.cookies.lang || 'en'; 
+  req.setLocale?.(lang); 
+  res.locals.lang = lang; 
+  next();
+});
 
 
 // Middleware
@@ -53,14 +62,3 @@ app.use('/schedule', scheduleRoutes);
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
-
-
-app.use((req, res, next) => {
-  const lang = req.query.lang;
-  if (lang) {
-    res.cookie('locale', lang);
-    req.setLocale(lang);
-  }
-  next();
-});
-
