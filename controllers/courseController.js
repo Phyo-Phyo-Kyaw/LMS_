@@ -23,17 +23,37 @@ exports.getCourseById = async (req, res) => {
 };
 
 exports.createCourse = async (req, res) => {
-  const { name, description, faculty, certified } = req.body;
-  try {
-    const [result] = await db.query(
-      'INSERT INTO courses (name, description, faculty, certified) VALUES (?, ?, ?, ?)',
-      [name, description, faculty, certified]
-    );
-    res.status(201).json({ id: result.insertId, name, description, faculty, certified });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+ res.render('courses/create'); 
 };
+
+exports.storeCourse = async (req, res) => {
+  try {
+    const { courseTitle, courseDescription, coursePrice, courseLevel } = req.body;
+
+    // Validation
+    if (!courseTitle || !courseDescription || !coursePrice || !courseLevel) {
+      return res.status(400).json({ message: 'Fill all fields' });
+    }
+    if (!['beginner', 'intermediate', 'advanced'].includes(courseLevel)) {
+      return res.status(400).json({ message: 'Invalid level' });
+    }
+
+    const query = `
+      INSERT INTO courses (name, description, level, price)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+
+    const values = [courseTitle, courseDescription, courseLevel, coursePrice];
+
+    const result = await pool.query(query, values);
+
+    res.redirect('/courses'); 
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+}
 
 exports.updateCourse = async (req, res) => {
   const { name, description, faculty, certified } = req.body;
