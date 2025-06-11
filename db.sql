@@ -85,3 +85,13 @@ VALUES
   ('Database Systems', 'Ms. Anna', 'Tuesday', '10:00:00', '12:00:00', 'Lab 202'),
   ('Software Engineering', 'Dr. Ella', 'Wednesday', '13:00:00', '15:00:00', 'Room 105');
 
+
+
+CREATE TABLE roles ( id SERIAL PRIMARY KEY,
+  name VARCHAR(50) UNIQUE NOT NULL,
+created_at TIMESTAMP,
+updated_at TIMESTAMP);
+
+INSERT INTO roles (name)
+VALUES ('admin'), 
+  ('user');
